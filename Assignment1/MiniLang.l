@@ -34,19 +34,38 @@
 	return FALSE_KEYWORD;
 }
 
-([0-9])*(".")([0-9])* {
+[+-]?([0-9])*  {
+	yylval.ACTUAL_INTEGER = atoi(yytext);
+	return  INTEGER_TOKEN;
+}
+
+
+[+-]?([0-9]*[.])?[0-9]+ {
 	yylval.ACTUAL_FLOAT = atof(yytext);
 	return FLOAT_NUMBER_TOKEN;
 }
 
-[0-9]*  {
-	yylval.ACTUAL_INTEGER = atoi(yytext);
-	return  INTEGER_TOKEN;
-}
 [a-zA-Z_][a-zA-Z0-9_]* {
 	yylval.ACTUAL_TEXT = yytext;
 	return IDENTIFIER_TOKEN;
 } 
+
+"<"    return LESS_THAN;
+">"    return GREATER_THAN;
+"<="    return LESS_THAN_OR_EQUAL;
+">="    return GREATER_THAN_OR_EQUAL;
+"+"     return PLUS;
+"-"     return MINUS;
+"/"     return DIV;
+"*"     return MUL;
+"!"     return NOT;
+"("     return OPENBRACKET;
+")"     return CLOSEBRACKET;
+"=="     return BOOLEAN_EQUALS;
+"&&"    return AND_TOKEN;
+"||"    return OR_TOKEN;
+"\n"    return EOLN;
+
 
 %%
 

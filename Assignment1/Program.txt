@@ -1,4 +1,4 @@
-var name : string = true;
-var age : int = 98.90;
-var sirname : string;
+var name : boolean = true;
+var age : float = -98.0;
+var ageint : int = -90;
 var isOld : boolean = false;

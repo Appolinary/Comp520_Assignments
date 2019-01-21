@@ -23,6 +23,8 @@
 %token <ACTUAL_INTEGER> INTEGER_TOKEN
 %token <ACTUAL_TEXT> IDENTIFIER_TOKEN
 %token <ACTUAL_FLOAT> FLOAT_NUMBER_TOKEN
+%token <ACTUAL_TEXT> STRING_VALUE_TOKEN
+
 
 %token VAR_KEYWORD
 %token FLOAT_KEYWORD
@@ -58,23 +60,25 @@ declaration : VAR_KEYWORD IDENTIFIER_TOKEN COLON_KEYWORD type
 
 ;
 
-initialisation :  VAR_KEYWORD IDENTIFIER_TOKEN COLON_KEYWORD type EQUALS_KEYWORD value 
-              {printf("\n Found an initialisation \n"); }
+initialisation : boolean_initialisation | int_initialisation | float_initialisation
 ;
 
-type : BOOLEAN_KEYWORD 
-     | FLOAT_KEYWORD 
-     | INT_KEYWORD 
-     | STRING_KEYWORD
+boolean_initialisation :  VAR_KEYWORD IDENTIFIER_TOKEN COLON_KEYWORD BOOLEAN_KEYWORD EQUALS_KEYWORD boolean_value 
+              {printf("\n Found an initialisation  of a boolean\n"); }
+;
+int_initialisation :  VAR_KEYWORD IDENTIFIER_TOKEN COLON_KEYWORD INT_KEYWORD EQUALS_KEYWORD INTEGER_TOKEN 
+              {printf("\n Found an initialisation  of an integer\n"); }
+;
+
+float_initialisation :  VAR_KEYWORD IDENTIFIER_TOKEN COLON_KEYWORD FLOAT_KEYWORD EQUALS_KEYWORD FLOAT_NUMBER_TOKEN 
+              {printf("\n Found an initialisation  of a float\n"); }
+;
+
+
+boolean_value : TRUE_KEYWORD | FALSE_KEYWORD 
 ; 
 
-value : FLOAT_NUMBER_TOKEN
-	  | boolean
-	  | INTEGER_TOKEN
-;
-
-boolean : FALSE_KEYWORD
-		| TRUE_KEYWORD
+type: BOOLEAN_KEYWORD | INT_KEYWORD | STRING_KEYWORD | FLOAT_KEYWORD
 ;
 
 
