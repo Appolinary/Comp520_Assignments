@@ -24,6 +24,7 @@
 %token <ACTUAL_TEXT> IDENTIFIER_TOKEN
 %token <ACTUAL_FLOAT> FLOAT_NUMBER_TOKEN
 %token <ACTUAL_TEXT> STRING_VALUE_TOKEN
+%token <ACTUAL_TEXT> COMMENT_VALUE_TOKEN
 
 
 %token VAR_KEYWORD
@@ -40,6 +41,22 @@
 %token DOUBLE_OPENING_QUOTES_TOKEN
 %token DOUBLE_CLOSING_QUOTES_TOKEN
 
+%token LESS_THAN
+%token GREATER_THAN
+%token LESS_THAN_OR_EQUAL
+%token GREATER_THAN_OR_EQUAL
+%token PLUS
+%token MINUS
+%token DIV
+%token MULT
+%token NOT
+%token OPENBRACKET
+%token CLOSEBRACKET
+%token BOOLEAN_EQUALS
+%token AND_TOKEN
+%token OR_TOKEN
+%token EOLN
+
 %token COLON_KEYWORD
 %token SEMI_COLON_KEYWORD
 
@@ -47,12 +64,17 @@
 %%
 
 program : expression SEMI_COLON_KEYWORD program
+		| comment program 
 		| 
-
 ;    
+
+comment : COMMENT_VALUE_TOKEN 
+   {printf("\n This is a comment \n");}
+;
 
 expression : declaration
 		   | initialisation
+
 ;
 
 declaration : VAR_KEYWORD IDENTIFIER_TOKEN COLON_KEYWORD type 
@@ -60,7 +82,7 @@ declaration : VAR_KEYWORD IDENTIFIER_TOKEN COLON_KEYWORD type
 
 ;
 
-initialisation : boolean_initialisation | int_initialisation | float_initialisation
+initialisation : boolean_initialisation | int_initialisation | float_initialisation | string_initialisation
 ;
 
 boolean_initialisation :  VAR_KEYWORD IDENTIFIER_TOKEN COLON_KEYWORD BOOLEAN_KEYWORD EQUALS_KEYWORD boolean_value 
@@ -74,6 +96,9 @@ float_initialisation :  VAR_KEYWORD IDENTIFIER_TOKEN COLON_KEYWORD FLOAT_KEYWORD
               {printf("\n Found an initialisation  of a float\n"); }
 ;
 
+string_initialisation :  VAR_KEYWORD IDENTIFIER_TOKEN COLON_KEYWORD STRING_KEYWORD EQUALS_KEYWORD STRING_VALUE_TOKEN
+              {printf("\n Found an initialisation  of a string\n"); }
+;
 
 boolean_value : TRUE_KEYWORD | FALSE_KEYWORD 
 ; 

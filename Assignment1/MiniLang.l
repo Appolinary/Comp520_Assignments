@@ -10,8 +10,29 @@
 
 %%
 
-
 "\n"  
+
+
+"//".*  {
+	yylval.ACTUAL_TEXT = yytext;
+    return COMMENT_VALUE_TOKEN;
+}
+
+
+"<"   { return LESS_THAN;}
+">"   { return GREATER_THAN;}
+"<="   { return LESS_THAN_OR_EQUAL;}
+">="   { return GREATER_THAN_OR_EQUAL;}
+"+"    { return PLUS;}
+"-"     {return MINUS;}
+"/"     {return DIV;}
+"*"     {return MULT;}
+"!"     {return NOT;}
+"("     {return OPENBRACKET;}
+")"     {return CLOSEBRACKET;}
+"=="     {return BOOLEAN_EQUALS;}
+"&&"    {return AND_TOKEN;}
+"||"    {return OR_TOKEN;}
 ":"   {return COLON_KEYWORD;}
 ";"   {return SEMI_COLON_KEYWORD;}
 "="   {return EQUALS_KEYWORD;}
@@ -50,21 +71,11 @@
 	return IDENTIFIER_TOKEN;
 } 
 
-"<"    return LESS_THAN;
-">"    return GREATER_THAN;
-"<="    return LESS_THAN_OR_EQUAL;
-">="    return GREATER_THAN_OR_EQUAL;
-"+"     return PLUS;
-"-"     return MINUS;
-"/"     return DIV;
-"*"     return MUL;
-"!"     return NOT;
-"("     return OPENBRACKET;
-")"     return CLOSEBRACKET;
-"=="     return BOOLEAN_EQUALS;
-"&&"    return AND_TOKEN;
-"||"    return OR_TOKEN;
-"\n"    return EOLN;
+
+\"(\\.|[^"\\])*\" { 
+	yylval.ACTUAL_TEXT = yytext;
+	return STRING_VALUE_TOKEN; 
+}
 
 
 %%

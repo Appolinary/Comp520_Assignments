@@ -2,3 +2,5 @@ var name : boolean = true;
 var age : float = -98.0;
 var ageint : int = -90;
 var isOld : boolean = false;
+var name : string = "derp\"derp";
+/// // This is another \n comment\\/
