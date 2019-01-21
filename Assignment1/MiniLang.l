@@ -23,6 +23,7 @@
 ">"   { return GREATER_THAN;}
 "<="   { return LESS_THAN_OR_EQUAL;}
 ">="   { return GREATER_THAN_OR_EQUAL;}
+"!="   {return NOT_EQUAL_TO; }
 "+"    { return PLUS;}
 "-"     {return MINUS;}
 "/"     {return DIV;}
@@ -30,6 +31,8 @@
 "!"     {return NOT;}
 "("     {return OPENBRACKET;}
 ")"     {return CLOSEBRACKET;}
+"{"      {return OPENCURLYBRACKET;}
+"}"      {return CLOSECURLYBRACKET;}
 "=="     {return BOOLEAN_EQUALS;}
 "&&"    {return AND_TOKEN;}
 "||"    {return OR_TOKEN;}
@@ -47,11 +50,11 @@
 "read" {return READ_KEYWORD;}
 "print" {return PRINT_KEYWORD;}
 "true" {
- 	  yylval.ACTUAL_BOOLEAN = 1;
+ 	  yylval.ACTUAL_INTEGER = 1;
       return TRUE_KEYWORD;
   }
 "false" {
-	yylval.ACTUAL_BOOLEAN = 0;
+	yylval.ACTUAL_INTEGER = 0;
 	return FALSE_KEYWORD;
 }
 

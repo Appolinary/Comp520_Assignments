@@ -1,6 +1,8 @@
-var name : boolean = true;
-var age : float = -98.0;
-var ageint : int = -90;
+var name : boolean = (65.78 == 78.0);
+var age : float = -98.0 * 56.98 ;
+var ageint : int = (90 + 67);
 var isOld : boolean = false;
 var name : string = "derp\"derp";
 /// // This is another \n comment\\/
+print(("fabrice "));
+read(fabriceh09_01);

@@ -69,19 +69,20 @@ extern int yydebug;
     GREATER_THAN = 279,
     LESS_THAN_OR_EQUAL = 280,
     GREATER_THAN_OR_EQUAL = 281,
-    PLUS = 282,
-    MINUS = 283,
-    DIV = 284,
-    MULT = 285,
-    NOT = 286,
-    OPENBRACKET = 287,
-    CLOSEBRACKET = 288,
-    BOOLEAN_EQUALS = 289,
-    AND_TOKEN = 290,
-    OR_TOKEN = 291,
-    EOLN = 292,
-    COLON_KEYWORD = 293,
-    SEMI_COLON_KEYWORD = 294
+    NOT_EQUAL_TO = 282,
+    PLUS = 283,
+    MINUS = 284,
+    DIV = 285,
+    MULT = 286,
+    NOT = 287,
+    OPENBRACKET = 288,
+    CLOSEBRACKET = 289,
+    BOOLEAN_EQUALS = 290,
+    AND_TOKEN = 291,
+    OR_TOKEN = 292,
+    EOLN = 293,
+    COLON_KEYWORD = 294,
+    SEMI_COLON_KEYWORD = 295
   };
 #endif
 /* Tokens.  */
@@ -109,19 +110,20 @@ extern int yydebug;
 #define GREATER_THAN 279
 #define LESS_THAN_OR_EQUAL 280
 #define GREATER_THAN_OR_EQUAL 281
-#define PLUS 282
-#define MINUS 283
-#define DIV 284
-#define MULT 285
-#define NOT 286
-#define OPENBRACKET 287
-#define CLOSEBRACKET 288
-#define BOOLEAN_EQUALS 289
-#define AND_TOKEN 290
-#define OR_TOKEN 291
-#define EOLN 292
-#define COLON_KEYWORD 293
-#define SEMI_COLON_KEYWORD 294
+#define NOT_EQUAL_TO 282
+#define PLUS 283
+#define MINUS 284
+#define DIV 285
+#define MULT 286
+#define NOT 287
+#define OPENBRACKET 288
+#define CLOSEBRACKET 289
+#define BOOLEAN_EQUALS 290
+#define AND_TOKEN 291
+#define OR_TOKEN 292
+#define EOLN 293
+#define COLON_KEYWORD 294
+#define SEMI_COLON_KEYWORD 295
 
 /* Value type.  */
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
@@ -130,12 +132,11 @@ union YYSTYPE
 {
 #line 14 "MiniLang.y" /* yacc.c:1909  */
 
-	int ACTUAL_BOOLEAN;
 	int ACTUAL_INTEGER;
 	char * ACTUAL_TEXT;
 	float  ACTUAL_FLOAT;
 
-#line 139 "y.tab.h" /* yacc.c:1909  */
+#line 140 "y.tab.h" /* yacc.c:1909  */
 };
 
 typedef union YYSTYPE YYSTYPE;
