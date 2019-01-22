@@ -13,6 +13,7 @@ y.tab.h: MiniLang.y
 
 
 .PHONY: clean
+.PHONY: run
 
 clean:
 	rm lex.yy.c y.tab.c y.tab.h mini

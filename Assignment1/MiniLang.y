@@ -71,134 +71,58 @@
 %start program
 %%
 
-program: statement SEMI_COLON_KEYWORD program
-		| comment program 
-		| while_statement program
-		| if_statement program
-		| 
+program: statement SEMI_COLON_KEYWORD program | comment program | while_statement program | if_statement program
+	   | 
 ; 
-while_statement: | WHILE_KEYWORD OPENBRACKET boolean_expression CLOSEBRACKET  OPENCURLYBRACKET program CLOSECURLYBRACKET
+while_statement: WHILE_KEYWORD OPENBRACKET expression CLOSEBRACKET  OPENCURLYBRACKET program CLOSECURLYBRACKET
                ;
-if_statement:IF_KEYWORD OPENBRACKET boolean_expression CLOSEBRACKET  OPENCURLYBRACKET program CLOSECURLYBRACKET else_if_statements
-            | IF_KEYWORD OPENBRACKET boolean_expression CLOSEBRACKET  OPENCURLYBRACKET program CLOSECURLYBRACKET else_statement 
+if_statement:IF_KEYWORD OPENBRACKET expression CLOSEBRACKET  OPENCURLYBRACKET program CLOSECURLYBRACKET else_if_statements
+            | IF_KEYWORD OPENBRACKET expression CLOSEBRACKET  OPENCURLYBRACKET program CLOSECURLYBRACKET else_statement 
 			
 ; 
 else_statement : ELSE_KEYWORD OPENCURLYBRACKET program CLOSECURLYBRACKET 
 ;
 
-else_if_statements: ELSE_KEYWORD IF_KEYWORD OPENBRACKET boolean_expression CLOSEBRACKET OPENCURLYBRACKET program CLOSECURLYBRACKET else_statement
-				  | ELSE_KEYWORD IF_KEYWORD OPENBRACKET boolean_expression CLOSEBRACKET OPENCURLYBRACKET program CLOSECURLYBRACKET else_if_statements
+else_if_statements: ELSE_KEYWORD IF_KEYWORD OPENBRACKET expression CLOSEBRACKET OPENCURLYBRACKET program CLOSECURLYBRACKET else_statement
+				  | ELSE_KEYWORD IF_KEYWORD OPENBRACKET expression CLOSEBRACKET OPENCURLYBRACKET program CLOSECURLYBRACKET else_if_statements
 ;
 
 comment : COMMENT_VALUE_TOKEN 
    {printf("\n This is a comment \n");}
 ;
 
-statement : declaration
-		  | initialisation
-		  | read_statement
-		  | print_statement
-		  | variable_assignment
-
+expression: literal | expression binary_operator expression | unary_operator expression | OPENBRACKET expression CLOSEBRACKET
 ;
 
-variable_assignment : IDENTIFIER_TOKEN EQUALS_KEYWORD general_expression
-      {printf("\n a variable justs got assigned \n");}
+literal: IDENTIFIER_TOKEN | FLOAT_NUMBER_TOKEN | INTEGER_TOKEN | STRING_VALUE_TOKEN | TRUE_KEYWORD | FALSE_KEYWORD
 ;
 
-
-declaration : VAR_KEYWORD IDENTIFIER_TOKEN COLON_KEYWORD type 
-              {printf("\n Found a declaration \n"); }
-
+statement: initialisation | declaration | assignment | read_statement | print_statement | OPENBRACKET statement CLOSEBRACKET
 ;
 
-initialisation : boolean_initialisation | int_initialisation | float_initialisation | string_initialisation
+initialisation: VAR_KEYWORD IDENTIFIER_TOKEN COLON_KEYWORD type EQUALS_KEYWORD expression
 ;
 
-read_statement : READ_KEYWORD OPENBRACKET IDENTIFIER_TOKEN CLOSEBRACKET
-		{printf("\n  This is a read statement \n");}
+declaration: VAR_KEYWORD IDENTIFIER_TOKEN COLON_KEYWORD type 
 ;
 
-print_statement : PRINT_KEYWORD OPENBRACKET general_expression CLOSEBRACKET
-		{printf("\n  This is a print statement \n");}
+assignment: IDENTIFIER_TOKEN EQUALS_KEYWORD expression
 ;
 
-general_expression : boolean_expression 
-				   | integer_expression
-				   | float_expression
-				   | string_expression
+read_statement: READ_KEYWORD OPENBRACKET IDENTIFIER_TOKEN CLOSEBRACKET
 ;
 
-boolean_initialisation :  VAR_KEYWORD IDENTIFIER_TOKEN COLON_KEYWORD BOOLEAN_KEYWORD EQUALS_KEYWORD boolean_expression 
-              {printf("\n Found an initialisation  of a boolean\n"); }
-;
-int_initialisation :  VAR_KEYWORD IDENTIFIER_TOKEN COLON_KEYWORD INT_KEYWORD EQUALS_KEYWORD integer_expression 
-              {printf("\n Found an initialisation  of an integer\n"); }
+print_statement: PRINT_KEYWORD OPENBRACKET expression CLOSEBRACKET 
 ;
 
-float_initialisation :  VAR_KEYWORD IDENTIFIER_TOKEN COLON_KEYWORD FLOAT_KEYWORD EQUALS_KEYWORD float_expression 
-              {printf("\n Found an initialisation  of a float\n"); }
+binary_operator: PLUS | MINUS | MULT | DIV | BOOLEAN_EQUALS | NOT_EQUAL_TO | GREATER_THAN_OR_EQUAL | LESS_THAN_OR_EQUAL | GREATER_THAN | LESS_THAN | AND_TOKEN | OR_TOKEN
 ;
 
-string_initialisation :  VAR_KEYWORD IDENTIFIER_TOKEN COLON_KEYWORD STRING_KEYWORD EQUALS_KEYWORD string_expression
-              {printf("\n Found an initialisation  of a string\n"); }
-;
-
-
-type: BOOLEAN_KEYWORD | INT_KEYWORD | STRING_KEYWORD | FLOAT_KEYWORD
-;
-
-string_expression : STRING_VALUE_TOKEN
-				  | OPENBRACKET string_expression CLOSEBRACKET
-;
-
-boolean_expression : boolean_value
-				   | IDENTIFIER_TOKEN
-				   | integer_expression number_comparator integer_expression
-				   | float_expression number_comparator float_expression
-				   | boolean_expression boolean_comparator boolean_expression
-				   | NOT boolean_expression
-				   | OPENBRACKET boolean_expression CLOSEBRACKET
-				 
-;
-
-boolean_comparator : OR_TOKEN
-                   | AND_TOKEN
-                   | BOOLEAN_EQUALS
-                   | NOT_EQUAL_TO
-                   
-;
-
-boolean_value : TRUE_KEYWORD | FALSE_KEYWORD 
+unary_operator: NOT | MINUS
 ; 
 
-integer_expression : INTEGER_TOKEN
-				   | IDENTIFIER_TOKEN
-				   | integer_expression number_operation integer_expression
-				   | OPENBRACKET integer_expression CLOSEBRACKET
-				   | PLUS OPENBRACKET integer_expression CLOSEBRACKET
-				   | MINUS OPENBRACKET integer_expression CLOSEBRACKET
+type: FLOAT_KEYWORD | INT_KEYWORD | STRING_KEYWORD | BOOLEAN_KEYWORD
 ;
-
-float_expression   : FLOAT_NUMBER_TOKEN
-				   | IDENTIFIER_TOKEN
-				   | float_expression number_operation float_expression
-				   | OPENBRACKET float_expression CLOSEBRACKET
-				   | PLUS OPENBRACKET float_expression CLOSEBRACKET
-				   | MINUS OPENBRACKET float_expression CLOSEBRACKET
-;
-
-number_operation :  MINUS | PLUS | DIV | MULT
-
-
-number_comparator : NOT_EQUAL_TO 
-                   | BOOLEAN_EQUALS
-                   | LESS_THAN
-                   | LESS_THAN_OR_EQUAL
-                   | GREATER_THAN
-                   | GREATER_THAN_OR_EQUAL 
-;
-         
 
 
 %%
