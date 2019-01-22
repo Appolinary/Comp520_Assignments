@@ -3,6 +3,7 @@
 	#include <stdio.h>
     #include <stdlib.h>
     #include <stdbool.h>
+    #include <string.h>
 %}
 
 %option yylineno
@@ -10,14 +11,25 @@
 
 %%
 
-"\n"  
-
+[ \a\b\f\n\r\t\v] 
 
 "//".*  {
 	yylval.ACTUAL_TEXT = yytext;
     return COMMENT_VALUE_TOKEN;
 }
 
+"~"  {return NOT_IMPORTANT;}
+"@"  {return NOT_IMPORTANT;}
+"#" {return NOT_IMPORTANT;}
+"$" {return NOT_IMPORTANT;}
+"%" {return NOT_IMPORTANT;}
+"^" {return NOT_IMPORTANT;}
+"&" {return NOT_IMPORTANT;}
+"["  {return NOT_IMPORTANT;}
+"]" {return NOT_IMPORTANT;}
+"?" {return NOT_IMPORTANT;}
+"'" {return NOT_IMPORTANT;}
+"`"  {return NOT_IMPORTANT;}
 
 "<"   { return LESS_THAN;}
 ">"   { return GREATER_THAN;}
@@ -79,6 +91,8 @@
 	yylval.ACTUAL_TEXT = yytext;
 	return STRING_VALUE_TOKEN; 
 }
+
+.  { printf(" Error at :  '%d\n", yylineno ); exit(1);}
 
 
 %%

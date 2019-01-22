@@ -3,6 +3,44 @@ var age : float = -98.0 * 56.98 ;
 var ageint : int = (90 + 67);
 var isOld : boolean = false;
 var name : string = "derp\"derp";
-/// // This is another \n comment\\/
-print(("fabrice "));
+/// // This is another \n comment\\/~
+print(("derp\"derp~"));
 read(fabriceh09_01);
+
+while((2 == 4) || false){
+	
+	print(2 + 3);
+	//another comment
+
+	while(false0 - 672 > 5621){
+	   var age: int = 67;
+	}
+
+	number = ((34 + 56) <= (45));
+
+    if(true){
+       print(" got in by");
+    }
+    else if(5 > 4){
+        number = 6;
+    }
+    else if(5 > 4){
+        number = 6;
+    }
+    else if(5 > 4){
+        number = 6;
+    }
+    else{
+        read(number);
+    }
+
+
+}
+
+var name : int = 5 + 6;
+
+age = (2 + 5) <= 0 || true;
+
+while( (fals <=  2) ){
+	print("fabtice");
+}

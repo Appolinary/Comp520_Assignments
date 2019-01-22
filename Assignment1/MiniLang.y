@@ -58,6 +58,8 @@
 %token AND_TOKEN
 %token OR_TOKEN
 %token EOLN
+%token WILDCARD
+%token NOT_IMPORTANT
 
 %token COLON_KEYWORD
 %token SEMI_COLON_KEYWORD
@@ -69,10 +71,24 @@
 %start program
 %%
 
-program : statement SEMI_COLON_KEYWORD program
+program: statement SEMI_COLON_KEYWORD program
 		| comment program 
+		| while_statement program
+		| if_statement program
 		| 
-;    
+; 
+while_statement: | WHILE_KEYWORD OPENBRACKET boolean_expression CLOSEBRACKET  OPENCURLYBRACKET program CLOSECURLYBRACKET
+               ;
+if_statement:IF_KEYWORD OPENBRACKET boolean_expression CLOSEBRACKET  OPENCURLYBRACKET program CLOSECURLYBRACKET else_if_statements
+            | IF_KEYWORD OPENBRACKET boolean_expression CLOSEBRACKET  OPENCURLYBRACKET program CLOSECURLYBRACKET else_statement 
+			
+; 
+else_statement : ELSE_KEYWORD OPENCURLYBRACKET program CLOSECURLYBRACKET 
+;
+
+else_if_statements: ELSE_KEYWORD IF_KEYWORD OPENBRACKET boolean_expression CLOSEBRACKET OPENCURLYBRACKET program CLOSECURLYBRACKET else_statement
+				  | ELSE_KEYWORD IF_KEYWORD OPENBRACKET boolean_expression CLOSEBRACKET OPENCURLYBRACKET program CLOSECURLYBRACKET else_if_statements
+;
 
 comment : COMMENT_VALUE_TOKEN 
    {printf("\n This is a comment \n");}
@@ -82,8 +98,14 @@ statement : declaration
 		  | initialisation
 		  | read_statement
 		  | print_statement
+		  | variable_assignment
 
 ;
+
+variable_assignment : IDENTIFIER_TOKEN EQUALS_KEYWORD general_expression
+      {printf("\n a variable justs got assigned \n");}
+;
+
 
 declaration : VAR_KEYWORD IDENTIFIER_TOKEN COLON_KEYWORD type 
               {printf("\n Found a declaration \n"); }
@@ -132,22 +154,19 @@ string_expression : STRING_VALUE_TOKEN
 
 boolean_expression : boolean_value
 				   | IDENTIFIER_TOKEN
+				   | integer_expression number_comparator integer_expression
+				   | float_expression number_comparator float_expression
 				   | boolean_expression boolean_comparator boolean_expression
 				   | NOT boolean_expression
 				   | OPENBRACKET boolean_expression CLOSEBRACKET
-				   | INTEGER_TOKEN boolean_comparator INTEGER_TOKEN
-				   | FLOAT_NUMBER_TOKEN boolean_comparator FLOAT_NUMBER_TOKEN
-
+				 
 ;
 
 boolean_comparator : OR_TOKEN
                    | AND_TOKEN
                    | BOOLEAN_EQUALS
                    | NOT_EQUAL_TO
-                   | LESS_THAN
-                   | LESS_THAN_OR_EQUAL
-                   | GREATER_THAN
-                   | GREATER_THAN_OR_EQUAL
+                   
 ;
 
 boolean_value : TRUE_KEYWORD | FALSE_KEYWORD 
@@ -155,7 +174,7 @@ boolean_value : TRUE_KEYWORD | FALSE_KEYWORD
 
 integer_expression : INTEGER_TOKEN
 				   | IDENTIFIER_TOKEN
-				   | integer_expression number_comparator integer_expression
+				   | integer_expression number_operation integer_expression
 				   | OPENBRACKET integer_expression CLOSEBRACKET
 				   | PLUS OPENBRACKET integer_expression CLOSEBRACKET
 				   | MINUS OPENBRACKET integer_expression CLOSEBRACKET
@@ -163,16 +182,21 @@ integer_expression : INTEGER_TOKEN
 
 float_expression   : FLOAT_NUMBER_TOKEN
 				   | IDENTIFIER_TOKEN
-				   | float_expression number_comparator float_expression
+				   | float_expression number_operation float_expression
 				   | OPENBRACKET float_expression CLOSEBRACKET
 				   | PLUS OPENBRACKET float_expression CLOSEBRACKET
 				   | MINUS OPENBRACKET float_expression CLOSEBRACKET
 ;
 
+number_operation :  MINUS | PLUS | DIV | MULT
 
 
-
-number_comparator : MINUS | PLUS | DIV | MULT 
+number_comparator : NOT_EQUAL_TO 
+                   | BOOLEAN_EQUALS
+                   | LESS_THAN
+                   | LESS_THAN_OR_EQUAL
+                   | GREATER_THAN
+                   | GREATER_THAN_OR_EQUAL 
 ;
          
 
