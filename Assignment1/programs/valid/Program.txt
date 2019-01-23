@@ -64,5 +64,5 @@ while ((iter == 4)) {
     iter = iter - 1;
 }
 print(guess);
-print(guess * guess);
+print(guess + guess);
 

@@ -9,7 +9,7 @@ int print_token = 0;
 
 int main(int argc, char ** argv){
 
-	if(argc != 3){
+	if(argc != 2){
 		printf("Enter the right number of arguments \n");
 		return 0;
 	}
@@ -32,6 +32,7 @@ int main(int argc, char ** argv){
 	}
 	if(strcmp(mode, parse) == 0){
 		yyparse();
+		printf("OK\n");
 	}
 
 
