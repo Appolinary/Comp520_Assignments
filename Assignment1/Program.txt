@@ -1,11 +1,11 @@
 var name : boolean = (65.78 == 78.0);
 var age : float = -98.0 * 56.98 ;
 var ageint : int = (90 + 67);
-var isOld : boolean = false;
+var isOld : boolean = 594 + string45;
 var name : string = "derp\"derp";
 /// // This is another \n comment\\/~
-print(("derp\"derp~"));
-read(fabriceh09_01);
+print(("derp\"derp~ \n"));
+read(fabriceh09_01);fab = true;
 
 while((2 == 4) || false){
 	
@@ -26,6 +26,14 @@ while((2 == 4) || false){
     }
     else if(5 > 4){
         number = 6;
+        if(number){
+            print("fabrice");
+        }
+        else if(123){
+
+        }else if("done"){
+            print("are you crazy");
+        }
     }
     else if(5 > 4){
         number = 6;
@@ -50,13 +58,11 @@ var x: float = 0.0;
 var guess: float = 1.0;
 var iter: int = 10;
 read(x);
-while (iter) {
+while (!iter) {
     var quot: float = x / guess;
     guess = 0.5 * (guess + quot);
     iter = iter - 1;
 }
 print(guess);
 print(guess * guess);
-
-
 
