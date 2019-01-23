@@ -27,6 +27,8 @@
 "?"  {return tNOT_IMPORTANT ; }
 "'"  {return tNOT_IMPORTANT ; }
 "`"  {return tNOT_IMPORTANT ; }
+"|"  {return tNOT_IMPORTANT ; }
+"_"  {return tNOT_IMPORTANT ; }
 
 "<"   { return '<';}
 ">"   { return '>';}
