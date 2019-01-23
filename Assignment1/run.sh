@@ -14,7 +14,7 @@ then
 	exit 1
 fi
 
-if [[ "|scan|tokens|parse|pretty|symbol|typecheck|codegen|" != *"|$1|"* ]]
+if [[ "|scan|tokens|parse|" != *"|$1|"* ]]
 then
 	echo "Unknown mode \"$1\""
 	echo "Usage: $0 <mode> <file>"
@@ -28,4 +28,4 @@ fi
 #
 # You MUST replace the following command with the command for invoking your compiler
 
-./src/minic "$1" < "$2"
+"$2" | ./src/mini "$1"
