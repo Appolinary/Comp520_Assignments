@@ -7,7 +7,6 @@
 var num : int = 0;
 read(num);
 
-var isPerfectSquare: boolean;
 
 var i : int = 1;
 while (num > 0) {
@@ -15,4 +14,4 @@ while (num > 0) {
     i = (i + 2);
 }
 
-isPerfectSquare  = (num == 0);
+print(num == 0);
