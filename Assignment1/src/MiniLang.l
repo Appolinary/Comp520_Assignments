@@ -91,7 +91,7 @@
 	return tSTRINGVAL; 
 }
 
-.  { printf(" Error at :  '%d\n", yylineno ); exit(1);}
+.  {fprintf(stderr, "Error: line %d unkown symbol %s \n", yylineno, yytext); exit(1);}
 
 
 %%

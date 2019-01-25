@@ -6,7 +6,7 @@
 	extern int yylineno;
 
 	int yylex();
-	void yyerror(const char *s){fprintf(stderr, "Error at line : %d %s \n", yylineno,s ); exit(1);}
+	void yyerror(const char *s){fprintf(stderr, "Error: line %d %s \n", yylineno,s ); exit(1);}
 %}
 
 %error-verbose
@@ -45,10 +45,10 @@
 %left tOR
 %left tAND
 %left tEQUALS t_NOT_EQUAL_TO
-%left  t_GREATER_THAN_EQUAL t_LESS_THAN_OR_EQUAL  '>' '<'
+%left t_GREATER_THAN_OR_EQUAL t_LESS_THAN_OR_EQUAL  '>' '<'
 %left '+' '-'
 %left '*' '/'
-%left '!' 
+%left '!' tUMINUS
 
 %start program
 
@@ -92,7 +92,7 @@ expression: tINTVAL
 		  | expression '<' expression
 		  | expression '>' expression
           | '!' expression
-          | '-' expression
+          | '-' expression %prec tUMINUS
           | '(' expression ')'
 ;
 
