@@ -1,0 +1,16 @@
+// the program divides two positive integers without using multiplication, division or mod operators
+
+var divisor : int;
+var divident : int;
+
+read(divisor);
+read(divident);
+
+var quotient : int = 0;
+
+while(divident >= divisor){
+    divident = divident - divisor;
+    quotient = quotient + 1;
+}
+
+print(quotient);

@@ -1,0 +1,5 @@
+//adding a non expression in a while loop
+
+while(age = 1){
+	
+}

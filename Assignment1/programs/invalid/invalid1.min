@@ -1,0 +1,3 @@
+//tries to print a non expression 
+
+print(name = 2);
