@@ -155,6 +155,13 @@ void prettyEXP(EXP *e){
 			prettyEXP(e->val.binary.rhs);
 			printf(")");
 			break;
+		case k_expressionKindBooleanOr:
+			printf("(");
+			prettyEXP(e->val.binary.lhs);
+			printf(" || ");
+			prettyEXP(e->val.binary.rhs);
+			printf(")");
+			break;
 		case k_expressionKindGreaterThan:
 		    printf("(");
 			prettyEXP(e->val.binary.lhs);
@@ -173,6 +180,13 @@ void prettyEXP(EXP *e){
 			printf("(");
 			prettyEXP(e->val.binary.lhs);
 			printf(" == ");
+			prettyEXP(e->val.binary.rhs);
+			printf(")");
+			break;
+	    case k_expressionKindNotEqualTo:
+	    	printf("(");
+			prettyEXP(e->val.binary.lhs);
+			printf(" != ");
 			prettyEXP(e->val.binary.rhs);
 			printf(")");
 			break;
