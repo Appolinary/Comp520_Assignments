@@ -2,26 +2,41 @@
 	#include <stdio.h>
 	#include <stdbool.h>
 	#include <stdlib.h>
+	#include "tree.h"
 
 	extern int yylineno;
+	extern STATEMENT * root;
 
 	int yylex();
 	void yyerror(const char *s){fprintf(stderr, "Error: line %d %s \n", yylineno,s ); exit(1);}
 %}
 
+%locations
 %error-verbose
+
+%code requires{
+	#include "tree.h"
+}
 
 %union {
 	int ACTUAL_INTEGER;
 	char * ACTUAL_TEXT;
 	float  ACTUAL_FLOAT;
+	STATEMENT * mystatement;
+	EXP * exp;
 }
 
-%token tIDENTIFIER
+%type <mystatement> program statement
+%type <exp> expression
+
+
+
 %token <ACTUAL_INTEGER>tINTVAL
 %token <ACTUAL_FLOAT>tFLOATVAL
 %token <ACTUAL_TEXT>tSTRINGVAL
 
+
+%token <ACTUAL_TEXT> tIDENTIFIER
 %token tVAR
 %token tFLOAT
 %token tINT
@@ -30,8 +45,8 @@
 %token tIF
 %token tELSE
 %token tWHILE
-%token tREAD
-%token tPRINT
+%token <ACTUAL_TEXT>tREAD
+%token <ACTUAL_TEXT>tPRINT
 %token tTRUE
 %token tFALSE
 %token t_LESS_THAN_OR_EQUAL
@@ -54,46 +69,46 @@
 
 %%
 
-program : statement ';' program
-		| if_statement program
-		| while_statement program
-		|
+program : %empty                 {$$ = NULL;}
+        | statement ';' program   {root =  $1; $$ = $1;  $$->next = $3;}
+		| if_statement program    {printf("if statement \n");}
+		| while_statement program  {printf("while statement \n");}
 ;
 
-statement: tVAR tIDENTIFIER ':' tBOOLEAN '=' expression
-		 | tVAR tIDENTIFIER ':' tINT '=' expression
-		 | tVAR tIDENTIFIER ':' tFLOAT '=' expression
-		 | tVAR tIDENTIFIER ':' tSTRING '=' expression
-         | tVAR tIDENTIFIER ':' tBOOLEAN
-         | tVAR tIDENTIFIER ':' tINT
-         | tVAR tIDENTIFIER ':' tFLOAT
-         | tVAR tIDENTIFIER ':' tSTRING
-         | tIDENTIFIER '=' expression
-         | tPRINT '(' expression ')' 
-         | tREAD '(' tIDENTIFIER ')'
-;
+statement: tVAR tIDENTIFIER ':' tBOOLEAN '=' expression { $$ = initialisationStatement($2,"boolean", $6); }
+		 | tVAR tIDENTIFIER ':' tINT '=' expression   { $$ = initialisationStatement($2, "int",$6); }
+		 | tVAR tIDENTIFIER ':' tFLOAT '=' expression  { $$ = initialisationStatement($2,"float", $6); }
+		 | tVAR tIDENTIFIER ':' tSTRING '=' expression   { $$ = initialisationStatement($2,"string" , $6); }
+         | tVAR tIDENTIFIER ':' tBOOLEAN   {$$ = declarationStatement($2, "boolean");}
+         | tVAR tIDENTIFIER ':' tINT   {$$ = declarationStatement($2, "int");}
+         | tVAR tIDENTIFIER ':' tFLOAT   {$$ = declarationStatement($2, "float");}
+         | tVAR tIDENTIFIER ':' tSTRING   {$$ = declarationStatement($2, "string");}
+         | tIDENTIFIER '=' expression  {$$ = assignmentStatement($1, $3);}
+         | tPRINT '(' expression ')'  {$$ = printStatement($3);}
+         | tREAD '(' tIDENTIFIER ')'  {$$ = readStatement($3);}
 
-expression: tINTVAL
-  		  | tFLOATVAL
-  		  | tSTRINGVAL
-  		  | tFALSE
-  		  | tTRUE
-		  | tIDENTIFIER
-          | expression '*' expression
-          | expression '/' expression
-          | expression '+' expression
-          | expression '-' expression
-          | expression tEQUALS expression
-          | expression t_LESS_THAN_OR_EQUAL expression 
-		  |	expression t_GREATER_THAN_OR_EQUAL expression 
-          | expression t_NOT_EQUAL_TO expression
-          | expression  tAND expression
-		  | expression tOR expression 
-		  | expression '<' expression
-		  | expression '>' expression
-          | '!' expression
-          | '-' expression %prec tUMINUS
-          | '(' expression ')'
+
+expression: tINTVAL                                       {$$ = makeIntLiteralExpression($1);}
+  		  | tFLOATVAL                                     {$$ = makeFloatLiteralExpression($1);}
+  		  | tSTRINGVAL                                    {$$ = makeStringLiteralExpression($1);}
+  		  | tFALSE                                        {$$ = makeBooleanLiteralExpression("false");}
+  		  | tTRUE                                         {$$ = makeBooleanLiteralExpression("true");}
+		  | tIDENTIFIER                                   {$$ = makeIdentifierExpression($1);}
+          | expression '*' expression                     {$$ = makeExpressionFromOperations( $1, $3, k_expressionKindMultiplication);}
+          | expression '/' expression                     {$$ = makeExpressionFromOperations( $1, $3, k_expressionKindDivision);}
+          | expression '+' expression                     {$$ = makeExpressionFromOperations( $1, $3, k_expressionKindAddition);}
+          | expression '-' expression                     {$$ = makeExpressionFromOperations( $1, $3, k_expressionKindSubtraction);}
+          | expression tEQUALS expression                 {$$ = makeExpressionFromOperations( $1, $3, k_expressionKindDoubleEquals);}
+          | expression t_LESS_THAN_OR_EQUAL expression     {$$ = makeExpressionFromOperations( $1, $3, k_expressionKindLessThanOrEqualTo);}
+		  |	expression t_GREATER_THAN_OR_EQUAL expression  {$$ = makeExpressionFromOperations( $1, $3, k_expressionKindGreaterThanOrEqualTo);}
+          | expression t_NOT_EQUAL_TO expression            {$$ = makeExpressionFromOperations( $1, $3, k_expressionKindNotEqualTo);}
+          | expression  tAND expression                    {$$ = makeExpressionFromOperations( $1, $3, k_expressionKindBooleanAnd);}
+		  | expression tOR expression                      {$$ = makeExpressionFromOperations( $1, $3, k_expressionKindBooleanOr);}
+		  | expression '<' expression                      {$$ = makeExpressionFromOperations( $1, $3, k_expressionKindLessThan);}
+		  | expression '>' expression                      {$$ = makeExpressionFromOperations( $1, $3, k_expressionKindGreaterThan);}
+          | '!' expression                                 {$$ = makeExpressionFromOperations( $2, NULL, k_expressionKindUnaryNegate);}
+          | '-' expression %prec tUMINUS                   {$$ = makeExpressionFromOperations( $2, NULL, k_expressionKindUnaryMinus);}
+          | '(' expression ')'                             {$$ = $2;}
 ;
 
 if_statement: tIF '(' expression ')' '{' program '}' 

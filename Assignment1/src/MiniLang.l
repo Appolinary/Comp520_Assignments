@@ -79,17 +79,20 @@
 }
 
 [a-zA-Z_][a-zA-Z0-9_]* {
-	yylval.ACTUAL_TEXT = yytext;
-	if(print_token) printf("tIDENTIFIER(%s)\n", yytext); 
+	yylval.ACTUAL_TEXT = (char*)(malloc(strlen(yytext) + 1));
+	sprintf(yylval.ACTUAL_TEXT, "%s", yytext);
+	if(print_token) printf("tIDENTIFIER(%s)\n", yylval.ACTUAL_TEXT); 
 	return tIDENTIFIER;
 } 
 
 
-\"(\\.|[^"\\])*\" { 
-	yylval.ACTUAL_TEXT = yytext;
-	if(print_token) printf("tSTRINGVAL(%s)\n", yytext); 
-	return tSTRINGVAL; 
-}
+\"(\\.|[^"\\])*\"   { yylval.ACTUAL_TEXT = (char*)malloc(strlen(yytext)-1);
+                         yytext[strlen(yytext)-1] = '\0';
+                         sprintf(yylval.ACTUAL_TEXT,"%s",yytext+1);
+                         if(print_token) printf("tSTRINGVAL(%s)\n", yytext); 
+
+                         return tSTRINGVAL; 
+ }
 
 .  {fprintf(stderr, "Error: line %d unkown symbol %s \n", yylineno, yytext); exit(1);}
 

@@ -1,6 +1,6 @@
 
-mini : lex.yy.c y.tab.c y.tab.h Main.c 
-	gcc lex.yy.c y.tab.c y.tab.h Main.c -o $@ -lfl
+mini : tree.h tree.c lex.yy.c y.tab.c y.tab.h Main.c pretty.h pretty.c
+	gcc tree.h tree.c lex.yy.c y.tab.c y.tab.h Main.c pretty.h pretty.c -o $@ -lfl
 
 lex.yy.c: MiniLang.l
 	flex MiniLang.l
@@ -19,4 +19,4 @@ clean:
 	rm lex.yy.c y.tab.c y.tab.h mini
 
 run:
-	cat Program.txt | ./mini
+	cat perfectsquare.min | ./mini "parse"

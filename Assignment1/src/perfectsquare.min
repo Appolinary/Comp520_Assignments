@@ -1,0 +1,18 @@
+
+//reads a number and checks if it is perfect square or not. 
+//examples of perfect squares are 1, 4, 9, 16, 25, 36, 49, 64, 81, 100.
+// 14 for example is not a perfect square
+
+
+var num : int = 0;
+read(num);
+
+var myfloat : float = 0.0;
+
+
+var i : int = 1;
+while (num > 0) {
+    num = (num - i);
+    i = (i + 2);
+}
+print(num == 0);

@@ -1,11 +1,15 @@
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include "tree.h"
+#include "pretty.h"
 
 void yyparse();
 int yylex();
 
 int print_token = 0;
+
+STATEMENT * root;
 
 int main(int argc, char ** argv){
 
@@ -31,8 +35,10 @@ int main(int argc, char ** argv){
 		while(yylex());
 	}
 	if(strcmp(mode, parse) == 0){
-		yyparse();
+		yyparse();       
 		printf("OK\n");
+		pretty_print(root);
+
 	}
 
 
