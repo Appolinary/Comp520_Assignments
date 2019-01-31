@@ -56,7 +56,7 @@ typedef enum {
 
 
 typedef struct STATEMENT STATEMENT;
-
+typedef struct ifStatement ifStatement;
 
 
 
@@ -70,7 +70,14 @@ struct STATEMENT{
 		EXP * print;
 		struct {char * type; char * identifier; EXP * expression;}initialisation;
 		struct {char * identifier; EXP * expression;}assignment;
-		struct {EXP * conditionExpression; STATEMENT * body;}ifStatement;
+		struct {
+			EXP * conditionExpression; 
+			STATEMENT * body;
+			
+			char * present; //could either be else or elseIf
+			STATEMENT * presentStatement;
+			
+		}ifStatement;
 	    struct {EXP * conditionExpression; STATEMENT * body;}whileStatement;
 
 	} val;
@@ -95,6 +102,8 @@ STATEMENT * assignmentStatement(char * identifier, EXP * expression);
 STATEMENT * printStatement(EXP * expression);
 STATEMENT * readStatement(char * variable);
 STATEMENT * ifStatementCreation(EXP * expressionCondition, STATEMENT * body);
+STATEMENT * ifStatementCreation2(EXP * expressionCondition, STATEMENT * body, STATEMENT * elseBody);
+STATEMENT * ifStatementCreation3(EXP * expressionCondition, STATEMENT * body, STATEMENT * elseIfStatement);
 STATEMENT * whileStatementCreation(EXP * expressionCondition, STATEMENT * body);
 
 

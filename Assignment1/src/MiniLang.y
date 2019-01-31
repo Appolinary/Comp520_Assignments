@@ -26,7 +26,7 @@
 	EXP * exp;
 }
 
-%type <mystatement> program statement
+%type <mystatement> program statement while_statement if_statement
 %type <exp> expression
 
 
@@ -71,8 +71,8 @@
 
 program : %empty                 {$$ = NULL;}
         | statement ';' program   {root =  $1; $$ = $1;  $$->next = $3;}
-		| if_statement program    {printf("if statement \n");}
-		| while_statement program  {printf("while statement \n");}
+		| if_statement program    {root = $1; $$ = $1; $$->next = $2;}
+		| while_statement program  {root = $1; $$ = $1; $$->next = $2;}
 ;
 
 statement: tVAR tIDENTIFIER ':' tBOOLEAN '=' expression { $$ = initialisationStatement($2,"boolean", $6); }
@@ -110,13 +110,13 @@ expression: tINTVAL                                       {$$ = makeIntLiteralEx
           | '-' expression %prec tUMINUS                   {$$ = makeExpressionFromOperations( $2, NULL, k_expressionKindUnaryMinus);}
           | '(' expression ')'                             {$$ = $2;}
 ;
-
-if_statement: tIF '(' expression ')' '{' program '}' 
-			| tIF '(' expression ')' '{' program '}' tELSE if_statement
-			| tIF '(' expression ')' '{' program '}' tELSE '{' program '}'
+ 
+if_statement: tIF '(' expression ')' '{' program '}'   {$$ =  ifStatementCreation($3, $6); }
+			| tIF '(' expression ')' '{' program '}' tELSE if_statement {$$ = ifStatementCreation3($3, $6, $9);}
+			| tIF '(' expression ')' '{' program '}' tELSE '{' program '}'  {$$ = ifStatementCreation2($3, $6, $10);}
 ;
 
-while_statement: tWHILE '(' expression ')' '{' program '}'
+while_statement: tWHILE '(' expression ')' '{' program '}' {$$ = whileStatementCreation($3, $6); }
 ;
 
 %%

@@ -36,8 +36,11 @@ int main(int argc, char ** argv){
 	}
 	if(strcmp(mode, parse) == 0){
 		yyparse();       
-		printf("OK\n");
-		pretty_print(root);
+		printf("OK\n\n\n");
+
+		pretty_print(root , 0); //ie its not in body
+
+		printf("\n\n\n\n");
 
 	}
 

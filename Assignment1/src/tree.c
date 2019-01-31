@@ -96,8 +96,42 @@ STATEMENT * readStatement(char * variable){
 
 }
 STATEMENT * ifStatementCreation(EXP * expressionCondition, STATEMENT * body){
+     STATEMENT * statement = malloc(sizeof(STATEMENT));
+     statement->kind = k_statementKindIfStatement;
+     statement->val.ifStatement.conditionExpression = expressionCondition;
+     statement->val.ifStatement.body = body;
+
+     return statement;
+}
+
+STATEMENT * ifStatementCreation2(EXP * expressionCondition, STATEMENT * body, STATEMENT * elseBody){
+     STATEMENT * statement = malloc(sizeof(STATEMENT));
+     statement->kind = k_statementKindIfStatement;
+     statement->val.ifStatement.conditionExpression = expressionCondition;
+     statement->val.ifStatement.body = body;
+     statement->val.ifStatement.present = "else";
+     statement->val.ifStatement.presentStatement = elseBody;
+
+     return statement;
 
 }
+
+STATEMENT * ifStatementCreation3(EXP * expressionCondition, STATEMENT * body, STATEMENT * elseIfStatement){
+     STATEMENT * statement = malloc(sizeof(STATEMENT));
+     statement->kind = k_statementKindIfStatement;
+     statement->val.ifStatement.conditionExpression = expressionCondition;
+     statement->val.ifStatement.body = body;
+     statement->val.ifStatement.present = "elseIf";
+     statement->val.ifStatement.presentStatement = elseIfStatement;
+
+     return statement;
+}
 STATEMENT * whileStatementCreation(EXP * expressionCondition, STATEMENT * body){
+    STATEMENT * statement = malloc(sizeof(STATEMENT));
+     statement->kind = k_statementKindWhileStatement;
+     statement->val.whileStatement.conditionExpression = expressionCondition;
+     statement->val.whileStatement.body = body;
+     
+     return statement;
 
 }
