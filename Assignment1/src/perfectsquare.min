@@ -4,43 +4,11 @@
 // 14 for example is not a perfect square
 
 
-var num : int = 0;
-read(num);
+var a : int;
 
-var myfloat : float = 0.0;
-
-
-var i : int = 1;
-while (num > 0) {
-    num = (num - i);
-    i = (i + 2);
-
-    while(x == true){
-       var i : boolean = false;
-       main = (67 + 65) < 67;
-
-       while(age == 6){
-          print("i love this");
-       }
-       var myfun : float = 4.5;
-    }
-
-    if(name == 3){
-       print("i am cominmg");
-    }
-    else if(65 < 67){
-       var t : boolean = false;
-    }
-    else if(name == 4){
-    	print((5 + 4) <= 8);
-    }else{
-       read(naming);
-    }
-
-    if(6 > 9 ){
-       print("nothing");
-    }
-
-    var unix: string = "my name is fabrice";
+while(true){
+     a = 5;
+	 b = 6;
 }
-print(num == 0);
+
+a = 5;

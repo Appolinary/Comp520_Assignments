@@ -22,7 +22,7 @@ void pretty_print(STATEMENT * statement , int indentation){ // 1  = in body mean
 		    
 		    break;
 	    case k_statementKindDeclaration:
-	    	printf("var %s : %s\n", statement->val.declaration.identifier, statement->val.declaration.type);
+	    	printf("var %s : %s;\n", statement->val.declaration.identifier, statement->val.declaration.type);
 		   
 		    pretty_print(statement->next , indentation);
 		    
