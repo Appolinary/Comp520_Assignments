@@ -1,6 +1,6 @@
 
-mini : tree.h tree.c lex.yy.c y.tab.c y.tab.h Main.c pretty.h pretty.c SymbolTable.h SymbolTable.h
-	gcc tree.h tree.c lex.yy.c y.tab.c y.tab.h Main.c pretty.h pretty.c SymbolTable.h SymbolTable.c -o $@ -lfl
+mini : tree.h tree.c lex.yy.c y.tab.c y.tab.h Main.c pretty.h pretty.c SymbolTable.h SymbolTable.h CodeGeneration.h CodeGeneration.c
+	gcc tree.h tree.c lex.yy.c y.tab.c y.tab.h Main.c pretty.h pretty.c SymbolTable.h SymbolTable.c CodeGeneration.h CodeGeneration.c -o $@ -lfl
 
 lex.yy.c: MiniLang.l
 	flex MiniLang.l

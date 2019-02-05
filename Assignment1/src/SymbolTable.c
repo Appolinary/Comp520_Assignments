@@ -82,13 +82,13 @@ void validateSymbols(STATEMENT * root, SymbolTable * table){
 
         if(type != k_typeBoolean){
             printf("The condition in the if statement is not valid\n");
-            return;
-        }
+        }else{
 
-        SymbolTable * newScope = scopeSymbolTable(table);
+           SymbolTable * newScope = scopeSymbolTable(table);
 
-        //and then call the same statement for the body;
-        validateSymbols(root->val.ifStatement.body, newScope);
+          //and then call the same statement for the body;
+          validateSymbols(root->val.ifStatement.body, newScope);
+       }
     }
 
     if(root->kind == k_statementKindWhileStatement){
@@ -97,13 +97,13 @@ void validateSymbols(STATEMENT * root, SymbolTable * table){
 
         if(type != k_typeBoolean){
             printf("The condition in the while statement is not valid\n");
-            return;
-        }
+        }else{
 
 
         SymbolTable * newScope = scopeSymbolTable(table);
 
         validateSymbols(root->val.whileStatement.body, newScope);
+    }
     }
 
     //if its an initialisation then check if it is valid
@@ -122,11 +122,24 @@ void validateSymbols(STATEMENT * root, SymbolTable * table){
     }
 
     if(root->kind == k_statementKindPrintStatement){
-        checkPrintValidity(root, table);
+        //only prints an expression or a string variable
+         Type type = getType(root->val.print, table);
+
+         if(type == k_typeInvalid){
+              printf("Invalid expression in the print statement\n");
+         }
+
     }
 
     if(root->kind == k_statementKindReadStatement){
-        checkReadValidity(root, table);
+        //get if the symbol has been defined 
+        Symbol * symbol = getSymbol(table , root->val.read);
+
+        //if symbol is not defined then return
+        if(symbol == NULL){
+            printf("The variable %s in the read statement is not defined\n", root->val.read);
+        }
+
     }
 
     validateSymbols(root->next, table);
@@ -252,21 +265,20 @@ void checkAssignmentValidity(STATEMENT * statment, SymbolTable * table){
 
 }
 
-void checkPrintValidity(STATEMENT * statment, SymbolTable * table){
-
-}
-void checkReadValidity(STATEMENT * statment, SymbolTable * table){
-
-}
-
 
 Type getType(EXP * exp, SymbolTable * table){
 
     if(exp->kind == k_expressionKindIdentifier){
         //need to look it up on the symbol table and find out if its defined and return its 
-        char * type;
+        char * type = malloc(sizeof(char));
 
         Symbol * symbol = getSymbol(table , exp->val.identifier);
+
+        if(symbol == NULL){
+           return k_typeInvalid;
+        }
+
+
         if(symbol->kind == k_symbolKindAssignment){
             return getType(symbol->data->data.assignmentSymbol->expressionValue, table);
         }

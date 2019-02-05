@@ -53,7 +53,7 @@ typedef struct PrintSymbol{
 }PrintSymbol;
 
 typedef struct ReadSymbol{
-	EXP * expressionValue;
+	char * identifier;
 }ReadSymbol;
 
 

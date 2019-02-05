@@ -4,6 +4,7 @@
 #include "tree.h"
 #include "pretty.h"
 #include "SymbolTable.h"
+#include "CodeGeneration.h"
 
 void yyparse();
 int yylex();
@@ -39,7 +40,7 @@ int main(int argc, char ** argv){
 		yyparse();       
 		printf("OK\n\n\n");
 
-		pretty_print(root , 0); //ie its not in body
+		codeGenerate(root , 0); //ie its not in body
 
 		printf("\n\n\n\n");
 
