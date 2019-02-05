@@ -4,11 +4,12 @@
 // 14 for example is not a perfect square
 
 
-var a : int;
+var a : boolean;
+var b : boolean;
 
-while(true){
-     a = 5;
-	 b = 6;
+while(b && (70 + 67 == 100)){
+     a = (5 + 4) < (6 + 6);
+	 //b = a - 6;
 }
 
-a = 5;
+a = (true == a);

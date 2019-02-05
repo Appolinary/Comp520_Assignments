@@ -28,6 +28,15 @@ typedef enum {
 }ExpressionKind;
 
 
+typedef enum {
+	k_typeString,
+	k_typeInteger,
+	k_typeFloat,
+	k_typeBoolean,
+	k_typeInvalid,
+}Type;
+
+
 typedef struct EXP EXP;
 
 struct EXP {
@@ -105,6 +114,8 @@ STATEMENT * ifStatementCreation(EXP * expressionCondition, STATEMENT * body);
 STATEMENT * ifStatementCreation2(EXP * expressionCondition, STATEMENT * body, STATEMENT * elseBody);
 STATEMENT * ifStatementCreation3(EXP * expressionCondition, STATEMENT * body, STATEMENT * elseIfStatement);
 STATEMENT * whileStatementCreation(EXP * expressionCondition, STATEMENT * body);
+
+
 
 
 

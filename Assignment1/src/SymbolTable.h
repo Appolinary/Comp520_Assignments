@@ -84,4 +84,7 @@ void checkPrintValidity(STATEMENT * statment, SymbolTable * table);
 void checkReadValidity(STATEMENT * statment, SymbolTable * table);
 
 
+Type getType(EXP * exp, SymbolTable * table);
+
+
 #endif
