@@ -177,6 +177,10 @@ void checkInitialisationValidity(STATEMENT * statment, SymbolTable * table){
             printf("Error: cannot assign float to a non float %s \n ", identifier);
             return;
         }
+        if(enumType == k_typeInvalid){
+            printf("Invalid expression");
+            return;
+        }
 
         //then we need to put the symbol into the table
         SymbolData * data = malloc(sizeof(SymbolData));
@@ -222,7 +226,7 @@ void checkAssignmentValidity(STATEMENT * statment, SymbolTable * table){
     }else{
 
         //first check if there are the same type :TODO
-        Type type;
+        Type type = k_typeInvalid;
 
         if(symbol->kind == k_symbolKindDeclaration){
             if(strcmp(symbol->data->data.declarationSymbol->type, "string") == 0){
@@ -247,7 +251,7 @@ void checkAssignmentValidity(STATEMENT * statment, SymbolTable * table){
             type = getType(symbol->data->data.initialisationSymbol->expressionValue, table);
         }
 
-        if(type != getType(statment->val.assignment.expression, table)){
+        if(type != getType(statment->val.assignment.expression, table) || type == k_typeInvalid){
             printf("cannot assign %s of different type to expression\n", identifier);
             return;
         }
@@ -330,10 +334,6 @@ Type getType(EXP * exp, SymbolTable * table){
         if(type == k_typeInteger || type == k_typeFloat){
             return type;
         } 
-
-        if(type == k_typeString && exp->kind == k_expressionKindAddition){
-            return k_typeString;
-        }
 
         return k_typeInvalid;
     }

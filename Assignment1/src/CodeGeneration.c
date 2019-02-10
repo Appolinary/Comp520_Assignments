@@ -19,14 +19,10 @@ void codeGenerate(STATEMENT * statement , SymbolTable * table , int indentation)
         	printf("%s = ", statement->val.assignment.identifier); 
 
         	//where to write expression for string;
-        	Type type = getType(statement->val.assignment.expression, table);
-        	if(type == k_typeString){
-        		//TODO: printing expressions
-        		printf(" \"tofinishStringAssignment\"");
-        	}else{
+        	
 
-        	   prettyEXP(statement->val.assignment.expression); 
-            }
+        	prettyEXP(statement->val.assignment.expression); 
+            
         	printf(";\n");
         	
 		    codeGenerate(statement->next, table,  indentation);
@@ -60,8 +56,7 @@ void codeGenerate(STATEMENT * statement , SymbolTable * table , int indentation)
 	    	//char * type = statement->val.initialisation.type;
 	    	if(strcmp(statement->val.initialisation.type, "string") == 0){
 	    	   printf("char *  %s = ", statement->val.initialisation.identifier);
-	    	   printf(" \"tofinishStringInitialisation\"");
-
+	    	   prettyEXP(statement->val.initialisation.expression);
 	    	   //prettyEXP(statement->val.initialisation.expression);
 	    	   printf(";\n");
 
@@ -95,13 +90,8 @@ void codeGenerate(STATEMENT * statement , SymbolTable * table , int indentation)
 
 			printf("printf(\"%s\\n\",", str1); 
 
-        	if(type == k_typeString){
-        		//TODO: printing expressions
-        		printf(" \"tofinishStringPrint\"");
-        	}else{
-
-        	   prettyEXP(statement->val.print); 
-            }
+        	prettyEXP(statement->val.print); 
+            
 			printf("); \n");
 		    
 		    codeGenerate(statement->next, table, indentation);
@@ -132,7 +122,7 @@ void codeGenerate(STATEMENT * statement , SymbolTable * table , int indentation)
            }
 
            if(strcmp(type1, "boolean") == 0 || typeK == k_typeBoolean){
-               str = "%d";
+               str = "%s";
            }
            if(strcmp(type1, "int") == 0 || typeK ==  k_typeInteger){
               str =  "%d";
@@ -143,8 +133,73 @@ void codeGenerate(STATEMENT * statement , SymbolTable * table , int indentation)
            }
 
 
-            if(typeK == k_typeString || strcmp(type1, "string") == 0){
-			 printf("scanf(\"%s\", %s);\n", str, variable);
+           if(strcmp(type1, "boolean") == 0 || typeK == k_typeBoolean){
+
+              char  tempVariable[100]; //= malloc(sizeof(char));
+           	  strcpy(tempVariable,"temp");
+           	  strcat(tempVariable, variable);
+
+           	  printf("char * %s =  malloc(sizeof(char));\n", tempVariable);
+
+           	  for(int i = 0; i < indentation; i++){
+           	  	printf("%s", tab);
+           	  }
+
+           	  printf("scanf(\"%s\", %s);\n", str, tempVariable);
+
+           	  for(int i = 0; i < indentation; i++){
+           	  	printf("%s", tab);
+           	  }
+
+           	  printf("if(strcmp(%s,\"true\") == 0){\n", tempVariable);
+
+           	  for(int i = 0; i < indentation + 1; i++){
+           	  	printf("%s", tab);
+           	  }
+           	  printf("%s = 1;\n", variable);
+           	   for(int i = 0; i < indentation; i++){
+           	  	printf("%s", tab);
+           	  }
+           	  printf("}\n");
+           	   for(int i = 0; i < indentation; i++){
+           	  	printf("%s", tab);
+           	  }
+           	  printf("else if(strcmp(%s,\"false\") == 0){\n", tempVariable);
+
+           	  for(int i = 0; i < indentation + 1; i++){
+           	  	printf("%s", tab);
+           	  }
+           	  printf("%s = 0;\n", variable);
+
+           	  for(int i = 0; i < indentation; i++){
+           	  	printf("%s", tab);
+           	  }
+
+           	  printf("}\n");
+
+           	  for(int i = 0; i < indentation; i++){
+           	  	printf("%s", tab);
+           	  }
+           	  printf("else{\n");
+
+           	  for(int i = 0; i < indentation + 1; i++){
+           	  	printf("%s", tab);
+           	  }
+           	  printf("printf(\"undefined boolean value\\n\");\n");
+           	  for(int i = 0; i < indentation + 1; i++){
+           	  	printf("%s", tab);
+           	  }
+           	  printf("exit(1);\n");
+
+           	  for(int i = 0; i < indentation; i++){
+           	  	printf("%s", tab);
+           	  }
+
+           	  printf("}\n");
+
+           }
+            else if(typeK == k_typeString || strcmp(type1, "string") == 0){
+			  printf("scanf(\"%s\", %s);\n", str, variable);
 		    }
 		    else{
 			  printf("scanf(\"%s\", &%s);\n", str, variable);
@@ -207,6 +262,5 @@ void codeGenerate(STATEMENT * statement , SymbolTable * table , int indentation)
 		    codeGenerate(statement->next, table,  indentation);
 		    
 		    break;
-
 	}
 }
