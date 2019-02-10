@@ -94,9 +94,9 @@ void codeGenerate(STATEMENT * statement , SymbolTable * table , int indentation)
 
 		    char * type1 = malloc(sizeof(char));
             
-            char * str;
+            char * str = "%s";
 
-            Type typeK ;
+            Type typeK =  k_typeInvalid;
 
 
             if(symbol->kind == k_symbolKindAssignment){
@@ -120,11 +120,9 @@ void codeGenerate(STATEMENT * statement , SymbolTable * table , int indentation)
                str = "%f";
            }
 
-           if(strcmp(type1, "string") == 0 || typeK == k_typeString){
-              str = "%s";
-           }
 
             if(typeK == k_typeString || strcmp(type1, "string") == 0){
+            	printf("this is a string %s \n", variable);
 			 printf("scanf(\"%s\", %s);\n", str, variable);
 		    }
 		    else{

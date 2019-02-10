@@ -75,7 +75,7 @@ int main(int argc, char ** argv){
 		yyparse();       
 
 		//first need to create the output file
-		int output = open("codegen2.c", O_RDWR|O_CREAT, 0644);
+		int outputdesc = open("codegen.c", O_CREAT|O_RDWR, 0644);
 
         validateSymbols(root, table);
 
@@ -84,10 +84,8 @@ int main(int argc, char ** argv){
 		//get the copy of the stdout file descriptor
 		int stdoutdesc = dup(1);
 
-		close(1);
-
 		//replace it with the output file
-		dup2(output, 1);
+		dup2(outputdesc, 1);
 
 		//need to add all needed files first
 		printf("#include <stdio.h>\n#include <stdlib.h>\n#include <string.h>\n#include <stdbool.h>\n\n\n");
@@ -102,11 +100,13 @@ int main(int argc, char ** argv){
 		printf("\n}");
 		printf("\n");
 
-		close(output);
 
 
 		//back to the stdout
 		dup2(stdoutdesc, 1);
+
+		close(outputdesc);
+
 
 		//close the output file
 
