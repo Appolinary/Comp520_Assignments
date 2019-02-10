@@ -74,42 +74,28 @@ int main(int argc, char ** argv){
 
 		yyparse();       
 
-		//first need to create the output file
-		int outputdesc = open("codegen.c", O_CREAT|O_RDWR, 0644);
+		validateSymbols(root, table);
 
-        validateSymbols(root, table);
+		int std = dup(1);
 
-		//need to redirect the output to the file
+		printf("\n");
+		close(1);
 
-		//get the copy of the stdout file descriptor
-		int stdoutdesc = dup(1);
+		int fd = open("codegen.c", O_WRONLY |O_CREAT , 0644);
 
-		//replace it with the output file
-		dup2(outputdesc, 1);
-
-		//need to add all needed files first
-		printf("#include <stdio.h>\n#include <stdlib.h>\n#include <string.h>\n#include <stdbool.h>\n\n\n");
-
-		//then add the main method
-		printf("int main{\n");
-
-		codeGenerate(root , table,  1); 
+		printf("#include <stdio.h>\n#include <stdlib.h>\n#include <stdbool.h>\n#include <string.h>\n\n\n");
+		printf("int main(){\n");
+        
+		codeGenerate(root, table, 1);
 
 		printf("   return 0;\n");
+		printf("}\n");
+		printf("\n\n");
+        
+        close(fd);
+		dup2(std, 1);
 
-		printf("\n}");
-		printf("\n");
-
-
-
-		//back to the stdout
-		dup2(stdoutdesc, 1);
-
-		close(outputdesc);
-
-
-		//close the output file
-
+	
 		printf("OK\n");
 
 	}

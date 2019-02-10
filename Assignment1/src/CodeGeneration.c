@@ -15,14 +15,24 @@ void codeGenerate(STATEMENT * statement , SymbolTable * table , int indentation)
 	}
 	switch(statement->kind){
 
-        case k_statementKindAssignment:
+        case k_statementKindAssignment:{
         	printf("%s = ", statement->val.assignment.identifier); 
-        	prettyEXP(statement->val.assignment.expression); 
+
+        	//where to write expression for string;
+        	Type type = getType(statement->val.assignment.expression, table);
+        	if(type == k_typeString){
+        		//TODO: printing expressions
+        		printf(" \"tofinishStringAssignment\"");
+        	}else{
+
+        	   prettyEXP(statement->val.assignment.expression); 
+            }
         	printf(";\n");
         	
 		    codeGenerate(statement->next, table,  indentation);
 		    
 		    break;
+		}
 	    case k_statementKindDeclaration:
 
 	    	//char * type = statement->val.declaration.type;
@@ -50,7 +60,10 @@ void codeGenerate(STATEMENT * statement , SymbolTable * table , int indentation)
 	    	//char * type = statement->val.initialisation.type;
 	    	if(strcmp(statement->val.initialisation.type, "string") == 0){
 	    	   printf("char *  %s = ", statement->val.initialisation.identifier);
-	    	   prettyEXP(statement->val.initialisation.expression); printf(";\n");
+	    	   printf(" \"tofinishStringInitialisation\"");
+
+	    	   //prettyEXP(statement->val.initialisation.expression);
+	    	   printf(";\n");
 
 	    	}
 	    	else if(strcmp(statement->val.initialisation.type, "boolean") == 0){
@@ -80,7 +93,16 @@ void codeGenerate(STATEMENT * statement , SymbolTable * table , int indentation)
    				str1 = "%f";
    			}
 
-			printf("printf(\"%s\",", str1); prettyEXP(statement->val.print); printf("); \n");
+			printf("printf(\"%s\\n\",", str1); 
+
+        	if(type == k_typeString){
+        		//TODO: printing expressions
+        		printf(" \"tofinishStringPrint\"");
+        	}else{
+
+        	   prettyEXP(statement->val.print); 
+            }
+			printf("); \n");
 		    
 		    codeGenerate(statement->next, table, indentation);
 		    
@@ -122,7 +144,6 @@ void codeGenerate(STATEMENT * statement , SymbolTable * table , int indentation)
 
 
             if(typeK == k_typeString || strcmp(type1, "string") == 0){
-            	printf("this is a string %s \n", variable);
 			 printf("scanf(\"%s\", %s);\n", str, variable);
 		    }
 		    else{

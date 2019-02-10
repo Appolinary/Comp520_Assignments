@@ -2,10 +2,15 @@
 
 
 // Approximate the square root of x
-var x: float;
-var guess: float;
-var iter: int;
-read(x);
+var x: float = 89.0;
+var guess: float = 1.0;
+var iter: int = 10;
+
+guess = 10 + 10.0;
+var name : string = "fabrice" + "fab";
+name = "fabrice" + "fabrice";
+
+read(name);
 while (iter > 0) {
 var quot: float = x / guess;
 guess = 0.5 * (guess + quot);

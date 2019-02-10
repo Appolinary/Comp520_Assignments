@@ -154,7 +154,7 @@ void checkInitialisationValidity(STATEMENT * statment, SymbolTable * table){
 
     Symbol * symbol = getSymbol(table, identifier);
 
-    if(symbol){
+    if(symbol != NULL){
         printf("The variable %s has already been defined\n", identifier);
     }else{
         //check if there are the same type
@@ -165,7 +165,7 @@ void checkInitialisationValidity(STATEMENT * statment, SymbolTable * table){
             printf("Error: cannot assign boolean to a non boolean %s \n ", identifier);
             return;
         }
-        if(enumType == k_typeInteger && strcmp(type, "int") != 0){
+        if(enumType == k_typeInteger && strcmp(type, "int") != 0  ){
             printf("Error: cannot assign int to a non integer %s \n ", identifier);
             return;
         }
@@ -322,18 +322,35 @@ Type getType(EXP * exp, SymbolTable * table){
         return k_typeInteger;
     }
 
-    if(exp->kind == k_expressionKindAddition || exp->kind == k_expressionKindMultiplication 
-        || exp->kind == k_expressionKindSubtraction || exp->kind == k_expressionKindDivision){
+    if((exp->kind == k_expressionKindAddition || exp->kind == k_expressionKindMultiplication 
+        || exp->kind == k_expressionKindSubtraction || exp->kind == k_expressionKindDivision) &&  getType(exp->val.binary.lhs, table)  == getType(exp->val.binary.rhs, table)){
+
+
+        Type type = getType(exp->val.binary.lhs, table);   
+        if(type == k_typeInteger || type == k_typeFloat){
+            return type;
+        } 
+
+        if(type == k_typeString && exp->kind == k_expressionKindAddition){
+            return k_typeString;
+        }
+
+        return k_typeInvalid;
+    }
+
+    if((exp->kind == k_expressionKindAddition || exp->kind == k_expressionKindMultiplication 
+        || exp->kind == k_expressionKindSubtraction || exp->kind == k_expressionKindDivision) && getType(exp->val.binary.lhs, table)  != getType(exp->val.binary.rhs, table) ){
 
         //both sides need to be equal and they have to be either all float or integer
         Type left = getType(exp->val.binary.lhs, table);
         Type right = getType(exp->val.binary.rhs, table);
 
-        if(left == right && (left == k_typeInteger || left == k_typeFloat)){
-            return left;
-        }else{
-            return k_typeInvalid;
-        } 
+        if((left == k_typeInteger && right == k_typeFloat) || (right == k_typeFloat && left == k_typeInteger)){
+            return k_typeFloat;
+        }
+        
+        return k_typeInvalid;
+        
     }
 
     if( exp->kind == k_expressionKindLessThan || exp->kind == k_expressionKindLessThanOrEqualTo ||
