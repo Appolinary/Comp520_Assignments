@@ -1,3 +1,0 @@
-//forgets a semicolon at the end of the statement
-
-var age : int = 45

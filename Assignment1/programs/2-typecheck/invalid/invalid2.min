@@ -1,0 +1,5 @@
+//tries to use an undeclared variable age
+
+var age : int;
+
+salary = age + 1;

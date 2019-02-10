@@ -1,3 +1,0 @@
-//tries to read a non variable
-
-read("age");

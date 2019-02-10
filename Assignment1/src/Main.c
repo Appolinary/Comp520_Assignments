@@ -18,11 +18,17 @@ STATEMENT * root;
 
 int main(int argc, char ** argv){
 
-	if(argc != 2){
+	if(argc != 3){
 		printf("Enter the right number of arguments \n");
 		return 0;
 	}
-   // char * fileName = argv[2];
+	//get the file name
+    char * fileNameWithExtension = argv[2];
+
+    //the file name to which the code generation will be sent to
+    char * filename = strtok(fileNameWithExtension, ".");
+
+     
 
 	char * mode = argv[1];
 	char * tokens = "tokens";
@@ -84,7 +90,9 @@ int main(int argc, char ** argv){
 		printf("\n");
 		close(1);
 
-		int fd = open("codegen.c", O_WRONLY |O_CREAT , 0644);
+	    strcat(filename, ".c"); //make it a c file
+
+		int fd = open(filename, O_WRONLY |O_CREAT , 0644);
 
 		printf("#include <stdio.h>\n#include <stdlib.h>\n#include <stdbool.h>\n#include <string.h>\n\n\n");
 		printf("int main(){\n");

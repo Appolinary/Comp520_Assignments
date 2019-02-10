@@ -1,0 +1,5 @@
+//tries to assign an integer to a non integer
+
+var age : int =  2;
+var isTrue: boolean  = age + 19;
+print(isTrue);

@@ -1,0 +1,8 @@
+// tries to re-declare a declared variable in the same scope
+
+var name : string;
+
+read(name);
+
+var name : string = "testing";
+

@@ -17,12 +17,12 @@ while (iter > 0) {
 	iter = iter - 1;
 	print(isGoing);
    
-    while(iter == 0){
-	   var guess1 : float;
-	   var guess2: int;
-	   var guess3 : boolean;
-	   var guess4 : string;
-	}
+
+	var guess1 : float;
+	var guess2: int;
+	var guess3 : boolean;
+	var guess4 : string;
+	
 	var guess5: float;
 	var guess6 : int;
 }

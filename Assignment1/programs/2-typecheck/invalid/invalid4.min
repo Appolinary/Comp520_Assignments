@@ -1,0 +1,11 @@
+//trying to use a non boolean expression in an if statement
+
+var age : int;
+var salary : int ;
+
+if(age + salary){
+	print("worked");
+}
+
+
+

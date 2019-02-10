@@ -1,0 +1,11 @@
+//reading from a variable out of scope
+
+
+var age: int;
+
+while(age == 1){
+
+   var name : string = "fab";
+
+}
+read(name);
