@@ -56,12 +56,15 @@ int main(int argc, char ** argv){
 	}
 	if(strcmp(mode, symbol) == 0){
 		//print out the symbol table
-		validateSymbols(root, table);
+		yyparse();
+		validateSymbols(root, table, 0, 0);
 
 	}
 
 	if(strcmp(mode, typecheck) == 0){
-        validateSymbols(root, table);
+		yyparse();
+        validateSymbols(root, table, 1, 0);
+        printf("OK\n");
 	}
 
 	if(strcmp(mode, pretty) == 0){
@@ -74,7 +77,7 @@ int main(int argc, char ** argv){
 
 		yyparse();       
 
-		validateSymbols(root, table);
+		validateSymbols(root, table, 1, 0);
 
 		int std = dup(1);
 

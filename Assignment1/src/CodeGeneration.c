@@ -81,18 +81,52 @@ void codeGenerate(STATEMENT * statement , SymbolTable * table , int indentation)
 
    		    str1 = "%s"; //assume the type is a string
 
-   			if(type == k_typeInteger || type == k_typeBoolean){
+   			if(type == k_typeInteger){
    				str1 = "%d";
    			}
    			else if (type == k_typeFloat){
    				str1 = "%f";
    			}
 
-			printf("printf(\"%s\\n\",", str1); 
+   			if(type == k_typeFloat || type == k_typeString || type == k_typeInteger){
 
-        	prettyEXP(statement->val.print); 
+			   printf("printf(\"%s\\n\",", str1); 
+
+        	   prettyEXP(statement->val.print); 
             
-			printf("); \n");
+			   printf("); \n");
+		   }
+		   else if ( type == k_typeBoolean){
+               printf("if(");
+               prettyEXP(statement->val.print);
+               printf(" == 1) {\n");
+
+               for(int i = 0; i < indentation + 1; i++){
+               	  printf("%s", tab);
+               }
+
+               printf("printf(\"true\\n\");\n");
+
+               for(int i = 0; i < indentation; i++){
+               	  printf("%s", tab);
+               }
+
+               printf("}\n");
+
+               for(int i = 0; i < indentation; i++){
+               	  printf("%s", tab);
+               }
+               printf("else{\n");
+
+               for(int i = 0; i < indentation + 1; i++){
+               	  printf("%s", tab);
+               }
+               printf("printf(\"false\\n\");\n");
+               for(int i = 0; i < indentation ; i++){
+               	  printf("%s", tab);
+               }
+               printf("}\n");
+           }
 		    
 		    codeGenerate(statement->next, table, indentation);
 		    

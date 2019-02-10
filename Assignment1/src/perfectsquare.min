@@ -8,13 +8,23 @@ var iter: int = 10;
 var isGoing: boolean;
 
 guess = 10 + 10.0;
-var name : string = "fab" + "fabrice";
+var name : string = "fab";
 
 read(isGoing);
 while (iter > 0) {
-var quot: float = x / guess;
-guess = 0.5 * (guess + quot);
-iter = iter - 1;
+	var quot: float = x / guess;
+	guess = 0.5 * (guess + quot);
+	iter = iter - 1;
+	print(isGoing);
+   
+    while(iter == 0){
+	   var guess1 : float;
+	   var guess2: int;
+	   var guess3 : boolean;
+	   var guess4 : string;
+	}
+	var guess5: float;
+	var guess6 : int;
 }
 print(guess);
 print(guess * guess);

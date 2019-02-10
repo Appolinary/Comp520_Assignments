@@ -75,16 +75,17 @@ SymbolTable * unscopeSymbolTable(SymbolTable * table);
 Symbol * putSymbol(SymbolTable * table, char * name, SymbolKind kind, SymbolData * data);
 Symbol * getSymbol(SymbolTable * table, char * name);
 
-void validateSymbols(STATEMENT * root, SymbolTable * table);
+void validateSymbols(STATEMENT * root, SymbolTable * table, int mode, int indentation);
 
-void checkInitialisationValidity(STATEMENT * statment, SymbolTable * table);
-void checkDeclarationValidity(STATEMENT * statment, SymbolTable * table);
-void checkAssignmentValidity(STATEMENT * statment, SymbolTable * table);
+void checkInitialisationValidity(STATEMENT * statment, SymbolTable * table, int mode, int indentation);
+void checkDeclarationValidity(STATEMENT * statment, SymbolTable * table, int mode, int indentation);
+void checkAssignmentValidity(STATEMENT * statment, SymbolTable * table, int mode, int indentation);
 void checkPrintValidity(STATEMENT * statment, SymbolTable * table);
 void checkReadValidity(STATEMENT * statment, SymbolTable * table);
 
 
 Type getType(EXP * exp, SymbolTable * table);
+char * getStringType(Type type);
 
 
 #endif
