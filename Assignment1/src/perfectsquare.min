@@ -1,19 +1,15 @@
 
-//reads a number and checks if it is perfect square or not. 
-//examples of perfect squares are 1, 4, 9, 16, 25, 36, 49, 64, 81, 100.
-// 14 for example is not a perfect square
 
 
-var a : boolean;
-var b : boolean;
-var c : string = "a new string";
-
-while(b && (70 + 67 <= 100)){
-     a = (5 + 4) < (6 + 6);
-	 //b = a - 6;
+// Approximate the square root of x
+var x: float = 0.0;
+var guess: float = 0.0;
+var iter: int = 9;
+read(iter);
+while (iter > 0) {
+var quot: float = x / guess;
+guess = 0.5 * (guess + quot);
+iter = iter - 1;
 }
-
-a = (true == (34 <= 40));
-
-print(a && b);
-read(b);
+print(guess);
+print(guess * guess);

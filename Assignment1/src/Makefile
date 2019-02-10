@@ -19,4 +19,4 @@ clean:
 	rm lex.yy.c y.tab.c y.tab.h mini
 
 run:
-	cat perfectsquare.min | ./mini "parse"
+	cat perfectsquare.min | ./mini "codegen" 

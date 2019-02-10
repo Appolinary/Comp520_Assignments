@@ -4,7 +4,7 @@
 
 
 
-void codeGenerate(STATEMENT * statement , int indentation){ // 1  = in body means its in if body or while body; 0 = means its not
+void codeGenerate(STATEMENT * statement , SymbolTable * table , int indentation){ // 1  = in body means its in if body or while body; 0 = means its not
 
 	if(statement == NULL){return;}
 
@@ -20,25 +20,28 @@ void codeGenerate(STATEMENT * statement , int indentation){ // 1  = in body mean
         	prettyEXP(statement->val.assignment.expression); 
         	printf(";\n");
         	
-		    codeGenerate(statement->next, indentation);
+		    codeGenerate(statement->next, table,  indentation);
 		    
 		    break;
 	    case k_statementKindDeclaration:
 
 	    	//char * type = statement->val.declaration.type;
 	    	if(strcmp(statement->val.declaration.type, "string") == 0){
-	    	   printf("char *  %s;\n", statement->val.declaration.identifier);
+	    	   printf("char *  %s = malloc(sizeof(char));\n", statement->val.declaration.identifier);
 
 	    	}
 	    	else if(strcmp(statement->val.declaration.type, "boolean") == 0){
-	    	   printf("bool  %s;\n", statement->val.declaration.identifier);
+	    	   printf("bool  %s = false;\n", statement->val.declaration.identifier);
+	    	}
+	    	else if(strcmp(statement->val.declaration.type, "float") == 0){
+	    	   printf("float  %s = 0.0;\n", statement->val.declaration.identifier);
 	    	}
 	    	else{
-	    	    printf("%s  %s;\n", statement->val.declaration.type, statement->val.declaration.identifier);
+	    	    printf("%s  %s = 0;\n", statement->val.declaration.type, statement->val.declaration.identifier);
 	    	}
 
 		   
-		    codeGenerate(statement->next , indentation);
+		    codeGenerate(statement->next , table, indentation);
 		    
 		    break;
 	    case k_statementKindInitialisation:
@@ -59,30 +62,83 @@ void codeGenerate(STATEMENT * statement , int indentation){ // 1  = in body mean
 	    	    prettyEXP(statement->val.initialisation.expression); printf(";\n");
 	    	}
 		    
-		    codeGenerate(statement->next, indentation);
+		    codeGenerate(statement->next, table,  indentation);
 		    
 		    break;
-		case k_statementKindPrintStatement:
-			printf("print("); prettyEXP(statement->val.print); printf("); \n");
+		case k_statementKindPrintStatement: {
+		    //get the type of the expression
+   			Type type = k_typeInvalid;  type = getType(statement->val.print, table);
+
+   			char * str1 = malloc(sizeof(char));
+
+   		    str1 = "%s"; //assume the type is a string
+
+   			if(type == k_typeInteger || type == k_typeBoolean){
+   				str1 = "%d";
+   			}
+   			else if (type == k_typeFloat){
+   				str1 = "%f";
+   			}
+
+			printf("printf(\"%s\",", str1); prettyEXP(statement->val.print); printf("); \n");
 		    
-		    codeGenerate(statement->next, indentation);
+		    codeGenerate(statement->next, table, indentation);
 		    
 		    break;
-		case k_statementKindReadStatement:
+		}
+		case k_statementKindReadStatement:{
 
-		    //first get the type of the variable
+             char * variable = statement->val.read;
+		    //get the type of the variable
+		    Symbol * symbol = getSymbol(table, variable);
+
+		    char * type1 = malloc(sizeof(char));
+            
+            char * str;
+
+            Type typeK ;
 
 
-		    printf("read(%s);\n", statement->val.read);
-		    
-		    codeGenerate(statement->next, indentation);
+            if(symbol->kind == k_symbolKindAssignment){
+               typeK =  getType(symbol->data->data.assignmentSymbol->expressionValue, table);
+            }
+            if(symbol->kind == k_symbolKindDeclaration){
+               type1  = symbol->data->data.declarationSymbol->type;
+            }
+            if(symbol->kind == k_symbolKindInitialisation){
+               type1 = symbol->data->data.initialisationSymbol->type;
+           }
+
+           if(strcmp(type1, "boolean") == 0 || typeK == k_typeBoolean){
+               str = "%d";
+           }
+           if(strcmp(type1, "int") == 0 || typeK ==  k_typeInteger){
+              str =  "%d";
+           }
+
+           if(strcmp(type1, "float") == 0 || typeK ==  k_typeFloat){
+               str = "%f";
+           }
+
+           if(strcmp(type1, "string") == 0 || typeK == k_typeString){
+              str = "%s";
+           }
+
+            if(typeK == k_typeString || strcmp(type1, "string") == 0){
+			 printf("scanf(\"%s\", %s);\n", str, variable);
+		    }
+		    else{
+			  printf("scanf(\"%s\", &%s);\n", str, variable);
+		    }
+		    codeGenerate(statement->next, table,  indentation);
 		    
 		    break;
+		}
 		case k_statementKindIfStatement:
 		    printf("if(");
 		    prettyEXP(statement->val.ifStatement.conditionExpression);
 		    printf("){\n");
-		    codeGenerate(statement->val.ifStatement.body, indentation + 1);
+		    codeGenerate(statement->val.ifStatement.body, table, indentation + 1);
 		    for(int i = 0; i < indentation; i++ ) {
 		    	printf("%s", tab);
 
@@ -95,7 +151,7 @@ void codeGenerate(STATEMENT * statement , int indentation){ // 1  = in body mean
 		    		printf("%s", tab);
 		        }
 		    	printf("else");
-		    	codeGenerate(statement->val.ifStatement.presentStatement, indentation);
+		    	codeGenerate(statement->val.ifStatement.presentStatement, table , indentation);
 		    }
 
 
@@ -107,7 +163,7 @@ void codeGenerate(STATEMENT * statement , int indentation){ // 1  = in body mean
 		    		printf("%s", tab);
 		        }
 		    	printf("else {\n");
-		    	codeGenerate(elseStatement, indentation + 1);
+		    	codeGenerate(elseStatement, table,  indentation + 1);
 
 		    	for(int i = 0; i < indentation; i++ ) {
 		    		printf("%s", tab);
@@ -116,20 +172,20 @@ void codeGenerate(STATEMENT * statement , int indentation){ // 1  = in body mean
 
 		    }
 
-		    codeGenerate(statement->next, indentation);
+		    codeGenerate(statement->next, table, indentation);
 			break;
 		case k_statementKindWhileStatement:
 		    printf("while("); prettyEXP(statement->val.whileStatement.conditionExpression); printf("){\n");
 		    STATEMENT * st = statement->val.whileStatement.body;
 		    
-		    codeGenerate(st, indentation + 1); //indent by 1 space
+		    codeGenerate(st, table,  indentation + 1); //indent by 1 space
 		    	
 		    for(int i = 0; i < indentation; i++){
 		    	printf("%s", tab);
 		    }
 		    printf("}\n");
 		    
-		    codeGenerate(statement->next, indentation);
+		    codeGenerate(statement->next, table,  indentation);
 		    
 		    break;
 

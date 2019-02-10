@@ -10,7 +10,7 @@
 #include "tree.h"
 
 
-void codeGenerate(STATEMENT * statement , int indentation);
+void codeGenerate(STATEMENT * statement , SymbolTable * table , int indentation);
 
 
 #endif

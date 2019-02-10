@@ -26,4 +26,4 @@ fi
 #
 # You MUST replace the following command with the command for invoking your compiler
 
-cat "$2" | ./src/mini "$1"
+cat "$2" | ./src/mini "$1" "$2"
